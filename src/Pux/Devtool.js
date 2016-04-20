@@ -2,7 +2,8 @@
 
 exports.actionToString = function (a) {
   function toString(a) {
-    var str = [a.constructor.name];
+    var name = a.constructor.name.match(/(String|Number)/) ? a : a.constructor.name;
+    var str = [name];
     Object.keys(a).forEach(function (key) {
       if (key[0] === 'v' && key[4] === 'e') {
         str.push('(' + toString(a[key]) + ')');
