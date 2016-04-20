@@ -16,9 +16,14 @@ exports.actionToString = function (a) {
 };
 
 exports.stateToString = function (s) {
-  return JSON.stringify(s, null, 2)
-    .replace(/"([^"]+)":/g, '$1:')
-    .replace(/<\//g, '<\\/')
-    .replace(/\n/g, '<br />')
-    .replace(/  /g, '&nbsp;&nbsp;');
+  return JSON.stringify(s, function (key, val) {
+    if (!val.constructor.name.match(/(Object|String|Number|Date|Symbol)/)) {
+      return exports.actionToString(val);
+    }
+    return val;
+  }, 2)
+  .replace(/"([^"]+)":/g, '$1:')
+  .replace(/<\//g, '<\\/')
+  .replace(/\n/g, '<br />')
+  .replace(/  /g, '&nbsp;&nbsp;');
 };
