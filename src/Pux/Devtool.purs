@@ -2,12 +2,14 @@ module Pux.Devtool where
 
 import Data.Maybe.Unsafe (fromJust)
 import Data.List ((:), index, List, singleton)
+import Data.Tuple (Tuple(Tuple))
 import Control.Monad.Eff (Eff)
 import Pux (App, Config, CoreEffects, EffModel, noEffects)
+import Pux.CSS hiding (style)
 import Pux.Html (button, div, h1, Html, i, span, text)
 import Pux.Html.Attributes (className, style, dangerouslySetInnerHTML)
 import Pux.Html.Events (onClick)
-import Prelude ((<), (>), (++), (+), (-), ($), const, map, not, bind, return, show)
+import Prelude ((#), (<), (>), (++), (+), (-), ($), const, map, negate, not, bind, return, show)
 
 data Action a
   = AppAction a
@@ -24,7 +26,7 @@ type State s =
   , length :: Int
   , index :: Int
   , opened :: Boolean
-  , width :: Int
+  , width :: Number
   }
 
 init :: forall s. s -> State s
@@ -34,7 +36,7 @@ init s =
   , length: 1
   , index: 0
   , opened: true
-  , width: 360
+  , width: 360.0
   }
 
 selectedState :: forall s. State s -> s
@@ -42,6 +44,10 @@ selectedState s = fromJust $ index s.states s.index
 
 selectedAction :: forall s. State s -> String
 selectedAction s = fromJust $ index s.actions s.index
+
+foreign import actionToString :: forall a. a -> String
+
+foreign import stateToString :: forall s. s -> String
 
 start :: forall a s e. (Config s a e) -> Eff (CoreEffects e) (App s (Action a))
 start config = do
@@ -140,21 +146,25 @@ view appView state =
     """ ]
     , div
         [ className "pux-devtool"
-        , style
-            { position: "fixed"
-            , right: 0
-            , width: if state.opened then (show state.width ++ "px") else "0px"
-            , top: 0
-            , height: "100%"
-            , overflow: "visible"
-            , background: "#424254"
-            , color: "#F9F9F9"
-            }
+        , Pux.CSS.style do
+            position fixed
+            right (0.0# px)
+            width $ px
+              if state.opened then (state.width) else 0.0
+            top (0.0# px)
+            height (100.0# pct)
+            overflow visible
+            backgroundColor (rgb 66 66 84)
+            color (rgb 249 249 249)
         ]
         [ div
             [ className "pux-devtool-container" ]
             [ h1
-                [ style { fontSize: "1.2em", marginTop: 0, fontWeight: "normal" } ]
+                [ Pux.CSS.style do
+                    fontSize (1.2# em)
+                    marginTop (0.0# px)
+                    fontWeight (weight 400.0)
+                ]
                 [ i [ className "fa fa-cog" ] [], text "Pux Devtool" ]
             , div
                 [ className "pux-devtool-actions" ]
@@ -179,9 +189,14 @@ view appView state =
                     [ onClick (const Clear) ]
                     [ i [ className "fa fa-trash" ] [] ]
                 ]
-            , div [ style { marginTop: "1em", fontWeight: "bold" } ] [ text (selectedAction state) ]
+            , div [ style
+                      [ Tuple "marginTop" "1em", Tuple "fontWeight" "bold" ]
+                  ]
+                  [ text (selectedAction state) ]
             , div
-                [ style { fontSize: ".9em", marginTop: "1em" }
+                [ Pux.CSS.style do
+                    fontSize (0.9# em)
+                    marginTop (1.0# em)
                 , dangerouslySetInnerHTML (stateToString (selectedState state))
                 ]
                 []
@@ -189,33 +204,27 @@ view appView state =
         , div
             [ className "toggle-hide"
             , onClick (const ToggleOpen)
-            , style
-                { position: "absolute"
-                , background: "#424254"
-                , borderTopLeftRadius: "3px"
-                , borderBottomLeftRadius: "3px"
-                , top: "50%"
-                , left: "-16px"
-                , height: "30px"
-                , lineHeight: "30px"
-                , cursor: "pointer"
-                , width: "16px"
-                , textAlign: "center"
-                , verticalAlign: "middle"
-                }
+            , style $ [ Tuple "lineHeight" "30px"
+                    , Tuple "cursor" "pointer"
+                    , Tuple "textAlign" "center"
+                    , Tuple "verticalAlign" "middle"
+                    ] ++ css do
+                position absolute
+                backgroundColor (rgb 66 66 84)
+                borderRadius (3.0# px) (0.0# px) (0.0#px) (3.0# px)
+                top (50.0# pct)
+                left (-16.0# px)
+                height (30.0# px)
+                width (16.0# px)
             ]
             [ i [ className "fa fa-chevron-right" ] []
             ]
         ]
     , div
         [ className "pux-devtool-app-container"
-        , style
-            { marginRight: if state.opened then show state.width ++ "px" else "0px"
-            }
+        , Pux.CSS.style do
+            marginRight $ px
+              if state.opened then state.width else 0.0
         ]
         [ map AppAction (appView (selectedState state)) ]
     ]
-
-foreign import actionToString :: forall a. a -> String
-
-foreign import stateToString :: forall s. s -> String
