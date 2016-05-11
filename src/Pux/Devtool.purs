@@ -104,6 +104,8 @@ view appView state =
         @import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css';
 
         .pux-devtool-container {
+          font-family: 'Open Sans', Trebuchet, Helvetica, sans-serif;
+          font-size: 14px;
           position: relative;
           padding: 1em;
           overflow: scroll;
@@ -111,8 +113,6 @@ view appView state =
         }
 
         .pux-devtool-container h1 i {
-          font-family: "Open Sans", Trebuchet, Helvetica, sans-serif;
-          font-size: 14px;
           padding-right: .5em;
         }
 
