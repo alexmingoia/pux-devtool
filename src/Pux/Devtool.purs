@@ -111,6 +111,8 @@ view appView state =
         }
 
         .pux-devtool-container h1 i {
+          font-family: "Open Sans", Trebuchet, Helvetica, sans-serif;
+          font-size: 14px;
           padding-right: .5em;
         }
 
