@@ -2,7 +2,7 @@
 
 exports.actionToString = function (a) {
   function toString(a) {
-    var name = a.constructor.name.match(/(String|Number)/) ? a : a.constructor.name;
+    var name = a.constructor.name.match(/(String|Number|Boolean)/) ? a : a.constructor.name;
     var str = [name];
     Object.keys(a).forEach(function (key) {
       if (key[0] === 'v' && key[4] === 'e') {
@@ -17,7 +17,7 @@ exports.actionToString = function (a) {
 
 exports.stateToString = function (s) {
   return JSON.stringify(s, function (key, val) {
-    if (!val.constructor.name.match(/(Object|Array|String|Number|Date|Symbol)/)) {
+    if (!val.constructor.name.match(/(Object|Boolean|Array|String|Number|Date|Symbol)/)) {
       return exports.actionToString(val);
     }
     return val;
