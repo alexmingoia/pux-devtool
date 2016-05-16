@@ -106,6 +106,7 @@ view appView state =
         .pux-devtool-container {
           font-family: 'Open Sans', Trebuchet, Helvetica, sans-serif;
           font-size: 14px;
+          line-height: 1.5;
           position: relative;
           padding: 1em;
           overflow: scroll;
