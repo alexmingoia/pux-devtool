@@ -17,7 +17,7 @@ exports.actionToString = function (a) {
 
 exports.stateToString = function (s) {
   return JSON.stringify(s, function (key, val) {
-    if (!val.constructor.name.match(/(Object|String|Number|Date|Symbol)/)) {
+    if (!val.constructor.name.match(/(Object|Array|String|Number|Date|Symbol)/)) {
       return exports.actionToString(val);
     }
     return val;
