@@ -1,6 +1,6 @@
 {
   "name": "purescript-pux-devtool",
-  "version": "2.0.3",
+  "version": "3.0.0",
   "description": "Pux time-travelling devtool.",
   "main": "index.js",
   "scripts": {
@@ -28,7 +28,6 @@
   },
   "homepage": "https://github.com/alexmingoia/pux-devtool#readme",
   "devDependencies": {
-    "pulp": "^8.1.1",
-    "purescript": "^0.8.4"
+    "purescript": "^0.9.1"
   }
 }
