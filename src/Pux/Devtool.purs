@@ -106,6 +106,10 @@ view appView state =
   div
     []
     [ Pux.Html.style [] [ text $ """
+        .pux-devtool {
+          z-index: 16777271;
+        }
+        
         .pux-devtool-container {
           font-family: sans-serif;
           font-size: 14px;
