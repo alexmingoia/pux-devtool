@@ -20,7 +20,7 @@
   "homepage": "https://github.com/alexmingoia/pux-devtool",
   "moduleType": [],
   "dependencies": {
-    "purescript-pux": "^5.0.1",
-    "purescript-pux-css": "^2.0.0"
+    "purescript-pux": "https://github.com/chexxor/purescript-pux.git#6d1d846c5ab65a1e845437df2bffcb9038cc24cc",
+    "purescript-pux-css": "https://github.com/chexxor/pux-css.git#1bfed991e9e8c6e604b7d2d6d6b384ec20fc2ebe"
   }
 }
