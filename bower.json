@@ -21,6 +21,6 @@
   "moduleType": [],
   "dependencies": {
     "purescript-pux": "https://github.com/alexmingoia/purescript-pux.git#v7.0.0",
-    "purescript-pux-css": "https://github.com/alexmingoia/pux-css.git#v3.0.0"
+    "purescript-pux-css": "https://github.com/alexmingoia/pux-css.git#v3.1.0"
   }
 }
