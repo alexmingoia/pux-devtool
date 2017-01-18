@@ -6,13 +6,14 @@ import Data.Tuple (Tuple(Tuple))
 import Control.Monad.Eff (Eff)
 import Pux (App, Config, CoreEffects, EffModel, noEffects)
 import Pux (start) as Pux
-import Pux.CSS hiding (style)
-import Pux.CSS (style) as Pux.CSS
-import Pux.Html (button, div, h1, Html, i, span, text, svg, path)
-import Pux.Html (style) as Pux.Html
-import Pux.Html.Attributes (className, d, viewBox, style, dangerouslySetInnerHTML)
+import Pux.CSS hiding (App(..), div, button, span, map, h1)
+import Pux.CSS (style) as PuxCSS
+import Pux.Html (button, div, h1, Html, span, text, svg, path)
+import Pux.Html (style) as PuxHtml
+import Pux.Html.Attributes (className, d, viewBox, dangerouslySetInnerHTML)
+import Pux.Html.Attributes (style) as PuxAttr
 import Pux.Html.Events (onClick)
-import Prelude ((#), (<), (>), (<>), (+), (-), ($), const, map, negate, not, bind, pure, show)
+import Prelude ((#), (<), (>), (<<<), (<>), (+), (-), ($), const, map, negate, not, bind, pure, show)
 
 data Action a
   = AppAction a
@@ -33,14 +34,23 @@ type State s =
   , width :: Number
   }
 
-init :: forall s. s -> State s
-init s =
+type Options = {
+  opened :: Boolean
+}
+
+defaultOptions :: Options
+defaultOptions = {
+  opened: true
+}
+
+init :: forall s. s -> Options -> State s
+init s o = do
   { actions: singleton "App initialized. Awaiting action..."
   , states: singleton s
   , init: s
   , length: 1
   , index: 0
-  , opened: true
+  , opened: o.opened
   , width: 360.0
   }
 
@@ -54,10 +64,10 @@ foreign import actionToString :: forall a. a -> String
 
 foreign import stateToString :: forall s. s -> String
 
-start :: forall a s e. (Config s a e) -> Eff (CoreEffects e) (App s (Action a))
-start config = do
+start :: forall a s e. (Config s a e) -> Options -> Eff (CoreEffects e) (App s (Action a))
+start config options = do
   app <- Pux.start
-    { initialState: init config.initialState
+    { initialState: init config.initialState options
     , update: update config.update
     , view: view config.view
     , inputs: map (map AppAction) config.inputs
@@ -105,11 +115,11 @@ view :: forall s a. (s -> Html a) -> State s -> Html (Action a)
 view appView state =
   div
     []
-    [ Pux.Html.style [] [ text $ """
+    [ PuxHtml.style [] [ text $ """
         .pux-devtool {
           z-index: 16777271;
         }
-        
+
         .pux-devtool-container {
           font-family: sans-serif;
           font-size: 14px;
@@ -169,7 +179,7 @@ view appView state =
     """ ]
     , div
         [ className "pux-devtool"
-        , Pux.CSS.style do
+        , PuxCSS.style do
             position fixed
             right (0.0# px)
             width $ px
@@ -183,7 +193,7 @@ view appView state =
         [ div
             [ className "pux-devtool-container" ]
             [ h1
-                [ Pux.CSS.style do
+                [ PuxCSS.style do
                     fontSize (1.2# em)
                     marginTop (0.0# px)
                     fontWeight (weight 400.0)
@@ -248,12 +258,12 @@ view appView state =
                         ]
                     ]
                 ]
-            , div [ style
+            , div [ PuxAttr.style
                       [ Tuple "marginTop" "1em", Tuple "fontWeight" "bold" ]
                   ]
                   [ text (selectedAction state) ]
             , div
-                [ Pux.CSS.style do
+                [ PuxCSS.style do
                     fontSize (0.8# em)
                     marginTop (1.0# em)
                 , dangerouslySetInnerHTML (stateToString (selectedState state))
@@ -263,18 +273,22 @@ view appView state =
         , div
             [ className "toggle-hide"
             , onClick (const ToggleOpen)
-            , style $ [ Tuple "lineHeight" "30px"
+            , PuxAttr.style $ [ Tuple "lineHeight" "30px"
                     , Tuple "cursor" "pointer"
                     , Tuple "textAlign" "center"
                     , Tuple "verticalAlign" "middle"
                     ] <> css do
                 position absolute
                 backgroundColor (rgb 66 66 84)
-                borderRadius (3.0# px) (0.0# px) (0.0#px) (3.0# px)
+                case state.opened of
+                  true -> borderRadius (3.0# px) (0.0# px) (0.0#px) (3.0# px)
+                  _ -> borderRadius (0.0# px) (3.0# px) (3.0#px) (0.0# px)
                 top (50.0# pct)
                 left (-12.0# px)
                 height (30.0# px)
                 width (12.0# px)
+                let dValue = if state.opened then 0.0 else 180.0
+                transform <<< rotate $ dValue # deg
             ]
             [ span
                 [ className "pux-devtool-icon caret-right" ]
@@ -286,7 +300,7 @@ view appView state =
         ]
     , div
         [ className "pux-devtool-app-container"
-        , Pux.CSS.style do
+        , PuxCSS.style do
             marginRight $ px
               if state.opened then state.width else 0.0
         ]

@@ -7,7 +7,7 @@
 
 ## Usage
 
-Replace `Pux.start` with `Pux.Devtool.start` and that's it!
+Replace `Pux.start` with `Pux.Devtool.start`, add `Pux.Devtool.Options` and that's it!
 
 ```purescript
 main = do
@@ -17,6 +17,9 @@ main = do
     , view: view
     , inputs: []
     }
+    Pux.Devtool.defaultOptions
+    -- or replace `Pux.Devtool.defaultOptions` with custom `Options`, e.g.
+    -- { opened: false }
 
   renderToDOM "#app" app.html
 ```
