@@ -6,9 +6,9 @@ import Data.Tuple (Tuple(Tuple))
 import Control.Monad.Eff (Eff)
 import Pux (App, Config, CoreEffects, EffModel, noEffects)
 import Pux (start) as Pux
-import Pux.CSS hiding (style)
-import Pux.CSS (style) as Pux.CSS
-import Pux.Html (button, div, h1, Html, i, span, text, svg, path)
+import Pux.CSS hiding (App(..), style, div, button, span, map, h1)
+import Pux.CSS (style) as PuxCSS
+import Pux.Html (button, div, h1, Html, span, text, svg, path)
 import Pux.Html (style) as Pux.Html
 import Pux.Html.Attributes (className, d, viewBox, style, dangerouslySetInnerHTML)
 import Pux.Html.Events (onClick)
@@ -109,7 +109,7 @@ view appView state =
         .pux-devtool {
           z-index: 16777271;
         }
-        
+
         .pux-devtool-container {
           font-family: sans-serif;
           font-size: 14px;
@@ -169,7 +169,7 @@ view appView state =
     """ ]
     , div
         [ className "pux-devtool"
-        , Pux.CSS.style do
+        , PuxCSS.style do
             position fixed
             right (0.0# px)
             width $ px
@@ -183,7 +183,7 @@ view appView state =
         [ div
             [ className "pux-devtool-container" ]
             [ h1
-                [ Pux.CSS.style do
+                [ PuxCSS.style do
                     fontSize (1.2# em)
                     marginTop (0.0# px)
                     fontWeight (weight 400.0)
@@ -253,7 +253,7 @@ view appView state =
                   ]
                   [ text (selectedAction state) ]
             , div
-                [ Pux.CSS.style do
+                [ PuxCSS.style do
                     fontSize (0.8# em)
                     marginTop (1.0# em)
                 , dangerouslySetInnerHTML (stateToString (selectedState state))
@@ -286,7 +286,7 @@ view appView state =
         ]
     , div
         [ className "pux-devtool-app-container"
-        , Pux.CSS.style do
+        , PuxCSS.style do
             marginRight $ px
               if state.opened then state.width else 0.0
         ]
