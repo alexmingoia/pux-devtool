@@ -34,14 +34,23 @@ type State s =
   , width :: Number
   }
 
-init :: forall s. s -> State s
-init s =
+type Options = {
+  opened :: Boolean
+}
+
+defaultOptions :: Options
+defaultOptions = {
+  opened: true
+}
+
+init :: forall s. s -> Options -> State s
+init s o = do
   { actions: singleton "App initialized. Awaiting action..."
   , states: singleton s
   , init: s
   , length: 1
   , index: 0
-  , opened: true
+  , opened: o.opened
   , width: 360.0
   }
 
@@ -55,10 +64,10 @@ foreign import actionToString :: forall a. a -> String
 
 foreign import stateToString :: forall s. s -> String
 
-start :: forall a s e. (Config s a e) -> Eff (CoreEffects e) (App s (Action a))
-start config = do
+start :: forall a s e. (Config s a e) -> Options -> Eff (CoreEffects e) (App s (Action a))
+start config options = do
   app <- Pux.start
-    { initialState: init config.initialState
+    { initialState: init config.initialState options
     , update: update config.update
     , view: view config.view
     , inputs: map (map AppAction) config.inputs
