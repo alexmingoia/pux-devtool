@@ -6,13 +6,14 @@ import Data.Tuple (Tuple(Tuple))
 import Control.Monad.Eff (Eff)
 import Pux (App, Config, CoreEffects, EffModel, noEffects)
 import Pux (start) as Pux
-import Pux.CSS hiding (App(..), style, div, button, span, map, h1)
+import Pux.CSS hiding (App(..), div, button, span, map, h1)
 import Pux.CSS (style) as PuxCSS
 import Pux.Html (button, div, h1, Html, span, text, svg, path)
-import Pux.Html (style) as Pux.Html
-import Pux.Html.Attributes (className, d, viewBox, style, dangerouslySetInnerHTML)
+import Pux.Html (style) as PuxHtml
+import Pux.Html.Attributes (className, d, viewBox, dangerouslySetInnerHTML)
+import Pux.Html.Attributes (style) as PuxAttr
 import Pux.Html.Events (onClick)
-import Prelude ((#), (<), (>), (<>), (+), (-), ($), const, map, negate, not, bind, pure, show)
+import Prelude ((#), (<), (>), (<<<), (<>), (+), (-), ($), const, map, negate, not, bind, pure, show)
 
 data Action a
   = AppAction a
@@ -105,7 +106,7 @@ view :: forall s a. (s -> Html a) -> State s -> Html (Action a)
 view appView state =
   div
     []
-    [ Pux.Html.style [] [ text $ """
+    [ PuxHtml.style [] [ text $ """
         .pux-devtool {
           z-index: 16777271;
         }
@@ -248,7 +249,7 @@ view appView state =
                         ]
                     ]
                 ]
-            , div [ style
+            , div [ PuxAttr.style
                       [ Tuple "marginTop" "1em", Tuple "fontWeight" "bold" ]
                   ]
                   [ text (selectedAction state) ]
@@ -263,18 +264,22 @@ view appView state =
         , div
             [ className "toggle-hide"
             , onClick (const ToggleOpen)
-            , style $ [ Tuple "lineHeight" "30px"
+            , PuxAttr.style $ [ Tuple "lineHeight" "30px"
                     , Tuple "cursor" "pointer"
                     , Tuple "textAlign" "center"
                     , Tuple "verticalAlign" "middle"
                     ] <> css do
                 position absolute
                 backgroundColor (rgb 66 66 84)
-                borderRadius (3.0# px) (0.0# px) (0.0#px) (3.0# px)
+                case state.opened of
+                  true -> borderRadius (3.0# px) (0.0# px) (0.0#px) (3.0# px)
+                  _ -> borderRadius (0.0# px) (3.0# px) (3.0#px) (0.0# px)
                 top (50.0# pct)
                 left (-12.0# px)
                 height (30.0# px)
                 width (12.0# px)
+                let dValue = if state.opened then 0.0 else 180.0
+                transform <<< rotate $ dValue # deg
             ]
             [ span
                 [ className "pux-devtool-icon caret-right" ]
