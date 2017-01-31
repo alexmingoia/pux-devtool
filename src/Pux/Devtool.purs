@@ -8,7 +8,7 @@ import Pux (App, Config, CoreEffects, EffModel, noEffects)
 import Pux (start) as Pux
 import Pux.CSS hiding (style)
 import Pux.CSS (style) as Pux.CSS
-import Pux.Html (button, div, h1, Html, i, span, text, svg, path)
+import Pux.Html (button, div, h1, Html, span, text, svg, path)
 import Pux.Html (style) as Pux.Html
 import Pux.Html.Attributes (className, d, viewBox, style, dangerouslySetInnerHTML)
 import Pux.Html.Events (onClick)
@@ -109,7 +109,7 @@ view appView state =
         .pux-devtool {
           z-index: 16777271;
         }
-        
+
         .pux-devtool-container {
           font-family: sans-serif;
           font-size: 14px;
