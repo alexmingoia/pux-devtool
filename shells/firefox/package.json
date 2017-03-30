@@ -1,0 +1,19 @@
+{
+  "title": "Pux Devtool",
+  "name": "pux-devtool",
+  "version": "1.0.2",
+  "description": "Pux devtool.",
+  "main": "index.js",
+  "author": "Alexander C. Mingoia",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "multiprocess": true,
+  "updateURL": "https://raw.githubusercontent.com/alexmingoia/pux-devtool/master/dist/firefox/update.rdf",
+  "updateLink": "https://raw.githubusercontent.com/alexmingoia/pux-devtool/master/dist/firefox/pux-devtool.xpi",
+  "license": "MIT",
+  "keywords": [
+    "jetpack"
+  ]
+}

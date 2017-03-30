@@ -1,0 +1,17 @@
+html, body {
+  background: #fcfcfc;
+  padding: 12px 36px;
+  color: #667380;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 13px;
+}
+
+pre {
+  color: #667380;
+  font-size: 13px;
+}
+
+#states {
+  display: inline-block;
+  margin-left: .5em;
+}

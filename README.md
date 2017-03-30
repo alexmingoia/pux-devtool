@@ -1,22 +1,21 @@
 # pux-devtool
 
-> A time-travelling debugger for
+> DevTools extension for
 > [Pux](https://github.com/alexmingoia/purescript-pux) applications.
 
 ![Pux Devtool animation](support/pux-devtool.gif)
 
-## Usage
+Visualize app state and events.
 
-Replace `Pux.start` with `Pux.Devtool.start` and that's it!
+- Show current event
+- Inspect current state
+- Time-travel between application states
 
-```purescript
-main = do
-  app <- Pux.Devtool.start
-    { initialState: initialState
-    , update: update
-    , view: view
-    , inputs: []
-    }
+## Chrome Extension
 
-  renderToDOM "#app" app.html
-```
+Install the Chrome extension from the [Chrome Web Store](https://chrome.google.com/webstore/detail/pux-devtool/ecolgfgmnimnllbgllbpfmnehejockmk).
+
+## Firefox Extension
+
+Install the FireFox extension by going to Add-Ons -> Install Add-On From File...
+-> then choose [pux_devtool-1.0.2-an+fx.xpi](https://github.com/alexmingoia/pux-devtool/tree/master/dist/firefox).
