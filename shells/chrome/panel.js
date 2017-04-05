@@ -6,29 +6,33 @@ var nextEl = document.getElementById("next");
 var firstEl = document.getElementById("first");
 var lastEl = document.getElementById("last");
 
-firstEl.addEventListener("click", function (ev) {
-  window.postMessage('first', '*');
-});
+if (!window.connected) {
+  window.connected = true;
 
-prevEl.addEventListener("click", function (ev) {
-  window.postMessage('prev', '*');
-});
+  firstEl.addEventListener("click", function (ev) {
+    window.postMessage('first', '*');
+  });
 
-nextEl.addEventListener("click", function (ev) {
-  window.postMessage('next', '*');
-});
+  prevEl.addEventListener("click", function (ev) {
+    window.postMessage('prev', '*');
+  });
 
-lastEl.addEventListener("click", function (ev) {
-  window.postMessage('last', '*');
-});
+  nextEl.addEventListener("click", function (ev) {
+    window.postMessage('next', '*');
+  });
 
-window.addEventListener('message', function (ev) {
-  if (ev.data && ev.data.name) {
-    if (ev.data.name === 'pux:state:change') {
-      eventEl.textContent = ev.data.detail.event
-      statesEl.textContent = (ev.data.detail.index + 1) + ' / ' + ev.data.detail.length;
-      stateEl.innerHTML = '';
-      stateEl.appendChild((new JSONFormatter(JSON.parse(ev.data.detail.state))).render());
+  lastEl.addEventListener("click", function (ev) {
+    window.postMessage('last', '*');
+  });
+
+  window.addEventListener('message', function (ev) {
+    if (ev.data && ev.data.name) {
+      if (ev.data.name === 'pux:state:change') {
+        eventEl.textContent = ev.data.detail.event
+        statesEl.textContent = (ev.data.detail.index + 1) + ' / ' + ev.data.detail.length;
+        stateEl.innerHTML = '';
+        stateEl.appendChild((new JSONFormatter(JSON.parse(ev.data.detail.state))).render());
+      }
     }
-  }
-})
+  })
+}
